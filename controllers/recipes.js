@@ -29,9 +29,14 @@ const getRecipeById = asyncHandler(async(req, res) => {
 
 const getLatestRecipe = asyncHandler(async(req, res) => {
    const data = await findLatest()
+   const maxResult = 5
+
+   if(data.rowCount > maxResult) {
+      data.rows = maxResult
+   }
    
    res.status(200).json({
-      data: data.rows[0],
+      data: data.rows,
    })
 })
 
