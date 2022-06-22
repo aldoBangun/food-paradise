@@ -2,9 +2,9 @@ const db = require('../config/database')
 const ErrorResponse = require('../utils/ErrorResponse')
 
 
-const getAllUser = () => {
+const findAll = () => {
    return new Promise((resolve, reject) => {
-      db.query('SELECT id, name, email, phone, photo FROM users', (err, result) => {
+      db.query('SELECT user_id, name, email, phone, photo FROM users', (err, result) => {
          if(err) return reject(err)
          resolve(result)
       })
@@ -12,9 +12,9 @@ const getAllUser = () => {
 }
 
 
-const getUserById = (id) => {
+const findById = (id) => {
    return new Promise((resolve, reject) => {
-      db.query('SELECT * FROM users WHERE id=$1', [id], (err, result) => {
+      db.query('SELECT * FROM users WHERE user_id=$1', [id], (err, result) => {
          if(err) return reject(err)
          if(result.rowCount) return resolve(result)
 
@@ -41,7 +41,7 @@ const update = (user) => {
    const { id, name, email, password, phone, photo } = user
 
    return new Promise((resolve, reject) => {
-      db.query('UPDATE users SET name=$1, email=$2, password=$3, phone=$4, photo=$5 WHERE id=$6',
+      db.query('UPDATE users SET name=$1, email=$2, password=$3, phone=$4, photo=$5 WHERE user_id=$6',
       [name, email, password, phone, photo, id],(err, result) => {
          if(err) return reject(err)
          resolve(result)
@@ -52,7 +52,7 @@ const update = (user) => {
 
 const destroy = (id) => {
    return new Promise((resolve, reject) => {
-      db.query('DELETE FROM users WHERE id=$1', [id], (err, result) => {
+      db.query('DELETE FROM users WHERE user_id=$1', [id], (err, result) => {
          if(err) return reject(err)
          resolve(result)
       })
@@ -60,4 +60,4 @@ const destroy = (id) => {
 }
 
 
-module.exports = { create, update, destroy, getAllUser, getUserById }
+module.exports = { create, update, destroy, findAll, findById }
