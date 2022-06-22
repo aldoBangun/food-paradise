@@ -1,9 +1,9 @@
 const asyncHandler = require('../middleware/asyncHandler')
-const { create, update, destroy, getAllUser, getUserById } = require('../models/users')
+const { create, update, destroy, findAll, findById } = require('../models/users')
 
 
 const getUsers = asyncHandler(async(req, res) => {
-   const users = await getAllUser()
+   const users = await findAll()
 
    res.status(200).json({
       data: users.rows,
@@ -13,10 +13,10 @@ const getUsers = asyncHandler(async(req, res) => {
 
 
 const getUser = asyncHandler(async(req, res) => {
-   const user = await getUserById(req.params.id)
+   const user = await findById(req.params.id)
 
    res.status(200).json({
-      data: user.rows,
+      data: user.rows[0],
       length: user.rowCount
    })
 })
@@ -35,21 +35,19 @@ const register = asyncHandler(async(req, res) => {
 
 const updateUser = asyncHandler(async(req, res) => {
    const { id } = req.params
-   const { name, email, password, phone, photo } = req.body
-   const data = await getUserById(id)
+   const data = await findById(id)
    const user = data.rows[0]
 
-   await update({ id, name, email, password, phone, photo })
+   await update({ id, ...req.body })
 
    res.status(200).json({
-      message: `Successfully updated user with an id of ${user.id}`,
-      data: { id, name, email }
+      message: `Successfully updated user with an id of ${user.user_id}`
    })
 })
 
 
 const deleteUser = asyncHandler(async(req, res) => {
-   const data = await getUserById(req.params.id)
+   const data = await findById(req.params.id)
    console.log(data)
    const user = data.rows[0]
 
