@@ -11,6 +11,8 @@ const PORT = process.env.PORT || 8000
 const notFound = require('./routes/notFound')
 const errorHandler = require('./middleware/errorHandler')
 const routeUsers = require('./routes/users')
+const routeRecipes = require('./routes/recipes')
+
 
 app.use(helmet())
 app.use(cors())
@@ -19,9 +21,11 @@ app.use(bodyParser.json())
 app.use(morgan('dev'))
 
 app.use('/users', routeUsers)
+app.use('/recipes', routeRecipes)
 
 app.use(notFound)
 app.use(errorHandler)
+
 
 app.listen(PORT, ()=> {
    console.log(`App is running on http://localhost:${PORT}`)
