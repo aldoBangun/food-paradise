@@ -1,4 +1,5 @@
 const router = require('express').Router()
+const { upload } = require('../middleware/fileUploads')
 const { 
    getRecipes,
    getRecipeById,
@@ -9,8 +10,12 @@ const {
 } = require('../controllers/recipes')
 
 
-router.route('/').get(getRecipes).post(createRecipe)
+router.route('/')
+   .get(getRecipes)
+   .post(upload.fields([{name: 'photo'}, {name: 'videos', maxCount: 4}]),createRecipe)
+
 router.route('/latest').get(getLatestRecipe)
+
 router.route('/:id').get(getRecipeById).patch(updateRecipe).delete(deleteRecipe)
 
 

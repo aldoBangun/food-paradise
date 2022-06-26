@@ -1,6 +1,6 @@
+const moment = require('moment')
 const asyncHandler = require('../middleware/asyncHandler')
 const { findAll, create, findById, findByUsername, findLatest, update, destroy } = require('../models/recipes')
-const moment = require('moment')
 
 
 const getRecipes = asyncHandler(async(req, res) => {
@@ -41,9 +41,14 @@ const getLatestRecipe = asyncHandler(async(req, res) => {
 })
 
 const createRecipe = asyncHandler(async(req, res) => {
-   const recipe = req.body
+   const photo = `${process.env.BASE_URL}/static/images/${req.files.photo.filename}`
+   const videos = req.files.videos.map(video => {
+      return `${process.env.BASE_URL}/static/videos/${video.filename}`
+   })
 
+   const recipe = { photo, videos, ...req.body }
    recipe.created_at = moment().format()
+
    await create(recipe)
 
    res.status(201).json({
