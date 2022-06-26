@@ -1,7 +1,7 @@
 const asyncHandler = require('../middleware/asyncHandler')
 const { create, update, destroy, findAll, findById } = require('../models/users')
 const deleteFiles = require('../utils/deleteFiles')
-const { BASE_URL, PORT } = process.env
+
 
 const getUsers = asyncHandler(async(req, res) => {
    const users = await findAll()
@@ -38,7 +38,7 @@ const updateUser = asyncHandler(async(req, res) => {
    const { id } = req.params
    const data = await findById(id)
    const user = data.rows[0]
-   const photo = `${BASE_URL}:${PORT}/static/images/${req.file.filename}`
+   const photo = `${process.env.BASE_URL}/static/images/${req.file.filename}`
 
    if(user.photo) {
       const filename = user.photo.split('/')[5]
