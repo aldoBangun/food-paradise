@@ -1,9 +1,16 @@
 const multer = require('multer')
 const path = require('path')
 
-const imageStorage = multer.diskStorage({
+
+const storage = multer.diskStorage({
    destination: (req, file, callback) => {
-      callback(null, path.join(__dirname, '../public/images'))
+      if(file.fieldname === 'videos') {
+         callback(null, path.join(__dirname, `../public/videos`))
+      }
+      
+      if(file.fieldname === 'photo') {
+         callback(null, path.join(__dirname, `../public/images`))
+      }
    },
    filename: (req, file, callback) => {
       const validName = file.originalname.split(' ').join('-')
@@ -14,22 +21,42 @@ const imageStorage = multer.diskStorage({
    }
 })
 
-const uploadImage = multer({
-   storage: imageStorage,
-   fileFilter: (req, file, callback) => {
-      const ONE_MEGA_BYTE = 1024 * 1024
-      const isValidMimeType = file.mimetype == "image/png" || file.mimetype == "image/jpg" || file.mimetype == "image/jpeg"
-      const isValidSize = file.size <= ONE_MEGA_BYTE
+const imageFileHandler = (req, file, callback) => {
+   const isValidMimeType = file.mimetype == 'image/png' || file.mimetype == 'image/jpg' || file.mimetype == 'image/jpeg'
 
-      if(!isValidMimeType) {
-         callback(new Error('Only accept .png, .jpg, .jpeg image format'), false)
-      }
-
-      if(!isValidSize) {
-         callback(new Error('Image cannot be more than 1 MB'), false)
-      }
+   if(!isValidMimeType) {
+      callback(new Error('Only accept .png, .jpg, .jpeg image format'), false)
+      return
    }
+
+   callback(null, true)
+}
+
+const videoFileHandler = (req, file, callback) => {
+   const isValidMimeType = file.mimetype == 'video/mp4' || file.mimetype == 'video/webm' || file.mimetype == 'video/quicktime'
+
+   if(!isValidMimeType) {
+      callback(new Error('Only accept .mp4, .webm, .mov video format'), false)
+      return
+   }
+
+   callback(null, true)
+}
+
+const fileFilter = (req, file, callback) => {
+   if(file.fieldname === 'photo') {
+      imageFileHandler(req, file, callback)
+   }
+
+   if(file.fieldname === 'videos') {
+      videoFileHandler(req, file, callback)
+   }
+}
+
+const upload = multer({
+   storage: storage,
+   fileFilter: fileFilter
 })
 
 
-module.exports = { uploadImage }
+module.exports = { upload }
