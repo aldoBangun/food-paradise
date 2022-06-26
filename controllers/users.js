@@ -58,10 +58,15 @@ const deleteUser = asyncHandler(async(req, res) => {
    console.log(data)
    const user = data.rows[0]
 
+   if(user.photo) {
+      const filename = user.photo.split('/')[5]
+      await deleteFiles('images', [filename])
+   }
+
    await destroy(req.params.id)
 
    res.status(200).json({
-      message: `Successfully deleted user with an id of ${user.id}`
+      message: `Successfully deleted user with an id of ${user.user_id}`
    })
 })
 
