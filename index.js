@@ -17,7 +17,7 @@ const routeRecipes = require('./routes/recipes')
 
 
 app.use(helmet())
-app.use(cors())
+app.use(cors({ origin: process.env.BASE_URL }))
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 app.use(morgan('dev'))
