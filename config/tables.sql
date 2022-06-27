@@ -35,3 +35,5 @@ CREATE TABLE IF NOT EXISTS saved_recipe(
    user_id int REFERENCES users(user_id),
    recipe_id int REFERENCES recipes(recipe_id)
 );
+
+ALTER TABLE comments ADD created_at timestamp;
