@@ -14,6 +14,7 @@ const notFound = require('./routes/notFound')
 const errorHandler = require('./middleware/errorHandler')
 const routeUsers = require('./routes/users')
 const routeRecipes = require('./routes/recipes')
+const routeComments = require('./routes/comments')
 
 
 app.use(helmet())
@@ -25,6 +26,7 @@ app.use('/static', express.static(path.join(__dirname, 'public')))
 
 app.use('/users', routeUsers)
 app.use('/recipes', routeRecipes)
+app.use('/comments', routeComments)
 
 app.use(notFound)
 app.use(errorHandler)
