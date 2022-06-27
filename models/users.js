@@ -23,6 +23,16 @@ const findById = (id) => {
    })
 }
 
+const findByEmail = (email) => {
+   return new Promise((resolve, reject) => {
+      db.query('SELECT * FROM users WHERE email=$1', [email], (err, result) => {
+         if(err) return reject(err)
+         if(result.rowCount) return resolve(result)
+
+         reject(new ErrorResponse('User Not Found', 404))
+      })
+   })
+}
 
 const create = (user) => {
    const { name, email, password, phone } = user
@@ -60,4 +70,4 @@ const destroy = (id) => {
 }
 
 
-module.exports = { create, update, destroy, findAll, findById }
+module.exports = { create, update, destroy, findAll, findById, findByEmail }
