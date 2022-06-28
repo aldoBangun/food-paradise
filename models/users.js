@@ -4,7 +4,7 @@ const ErrorResponse = require('../utils/ErrorResponse')
 
 const findAll = () => {
    return new Promise((resolve, reject) => {
-      db.query('SELECT user_id, name, email, phone, photo FROM users', (err, result) => {
+      db.query('SELECT * FROM users', (err, result) => {
          if(err) return reject(err)
          resolve(result)
       })

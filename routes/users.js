@@ -1,11 +1,12 @@
 const router = require('express').Router()
-const { getUsers, getUser, register, updateUser, deleteUser } = require('../controllers/users')
+const { getUsers, getUser, updateUser, deleteUser } = require('../controllers/users')
 const { upload } = require('../middleware/fileUploads')
+const { tokenVerify } = require('../middleware/jwt')
 
-router.route('/').get(getUsers).post(register)
+router.route('/').get(getUsers)
 router.route('/:id')
-   .get(getUser)
-   .patch(upload.single('photo'), updateUser)
-   .delete(deleteUser)
+   .get(tokenVerify, getUser)
+   .patch(tokenVerify, upload.single('photo'), updateUser)
+   .delete(tokenVerify, deleteUser)
 
 module.exports = router

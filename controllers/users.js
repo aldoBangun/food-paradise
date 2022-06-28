@@ -1,5 +1,5 @@
 const asyncHandler = require('../middleware/asyncHandler')
-const { create, update, destroy, findAll, findById } = require('../models/users')
+const { update, destroy, findAll, findById } = require('../models/users')
 const deleteFiles = require('../utils/deleteFiles')
 
 
@@ -19,17 +19,6 @@ const getUser = asyncHandler(async(req, res) => {
    res.status(200).json({
       data: user.rows[0],
       length: user.rowCount
-   })
-})
-
-
-const register = asyncHandler(async(req, res) => {
-   const { name, email, password, phone } = req.body
-   const user = await create({ name, email, password, phone })
-
-   res.status(201).json({
-      message: "Successfully registered new user",
-      data: { id: user.id, name, email }
    })
 })
 
@@ -70,4 +59,4 @@ const deleteUser = asyncHandler(async(req, res) => {
 })
 
 
-module.exports = { getUsers, getUser, register, updateUser, deleteUser }
+module.exports = { getUsers, getUser, updateUser, deleteUser }
