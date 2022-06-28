@@ -13,6 +13,7 @@ const PORT = process.env.PORT || 8000
 
 const notFound = require('./routes/notFound')
 const errorHandler = require('./middleware/errorHandler')
+const routeAuth = require('./routes/auth')
 const routeUsers = require('./routes/users')
 const routeRecipes = require('./routes/recipes')
 const routeComments = require('./routes/comments')
@@ -27,6 +28,7 @@ app.use(bodyParser.json())
 app.use(morgan('dev'))
 app.use('/static', express.static(path.join(__dirname, 'public')))
 
+app.use('/auth', routeAuth)
 app.use('/users', routeUsers)
 app.use('/recipes', routeRecipes)
 app.use('/comments', routeComments)
