@@ -55,7 +55,6 @@ const updateUser = asyncHandler(async(req, res) => {
 
 const deleteUser = asyncHandler(async(req, res) => {
    const data = await findById(req.params.id)
-   console.log(data)
    const user = data.rows[0]
 
    if(user.photo) {
