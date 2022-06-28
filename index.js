@@ -8,6 +8,7 @@ const cors = require('cors')
 const bodyParser = require('body-parser')
 const morgan = require('morgan')
 const app = express()
+const createStatic = require('./utils/createStatic')
 const PORT = process.env.PORT || 8000
 
 const notFound = require('./routes/notFound')
@@ -16,6 +17,8 @@ const routeUsers = require('./routes/users')
 const routeRecipes = require('./routes/recipes')
 const routeComments = require('./routes/comments')
 
+
+createStatic()
 
 app.use(helmet())
 app.use(cors({ origin: process.env.BASE_URL }))
