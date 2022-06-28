@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS users(
    email varchar(255) UNIQUE NOT NULL,
    phone varchar(20) NOT NULL,
    password varchar(255) NOT NULL,
-   photo varchar(255)
+   avatar varchar(255)
 );
 
 CREATE TABLE IF NOT EXISTS recipes(
@@ -35,5 +35,3 @@ CREATE TABLE IF NOT EXISTS saved_recipe(
    user_id int REFERENCES users(user_id),
    recipe_id int REFERENCES recipes(recipe_id)
 );
-
-ALTER TABLE comments ADD created_at timestamp;

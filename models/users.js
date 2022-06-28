@@ -51,7 +51,7 @@ const update = (user) => {
    const { id, name, email, password, phone, photo } = user
 
    return new Promise((resolve, reject) => {
-      db.query('UPDATE users SET name=$1, email=$2, password=$3, phone=$4, photo=$5 WHERE user_id=$6',
+      db.query('UPDATE users SET name=$1, email=$2, password=$3, phone=$4, avatar=$5 WHERE user_id=$6',
       [name, email, password, phone, photo, id],(err, result) => {
          if(err) return reject(err)
          resolve(result)
