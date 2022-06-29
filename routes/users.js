@@ -6,7 +6,7 @@ const { tokenVerify } = require('../middleware/jwt')
 router.route('/').get(getUsers)
 router.route('/:id')
    .get(tokenVerify, getUser)
-   .patch(tokenVerify, upload.single('photo'), updateUser)
+   .patch(tokenVerify, upload.single('avatar'), updateUser)
    .delete(tokenVerify, deleteUser)
 
 module.exports = router
