@@ -1,6 +1,8 @@
 const moment = require('moment')
 const asyncHandler = require('../middleware/asyncHandler')
 const { findAll, create, findById, findByUsername, findLatest, update, destroy } = require('../models/recipes')
+const deleteFiles = require('../utils/deleteFiles')
+const getStatic = require('../utils/getStatic')
 
 
 const getRecipes = asyncHandler(async(req, res) => {
@@ -13,7 +15,7 @@ const getRecipes = asyncHandler(async(req, res) => {
    }
 
    res.status(200).json({
-      data: data.rows,
+      data: getStatic(data.rows),
       length: data.rowCount
    })
 })
@@ -22,7 +24,7 @@ const getRecipeById = asyncHandler(async(req, res) => {
    const data = await findById(req.params.id)
 
    res.status(200).json({
-      data: data.rows[0]
+      data: getStatic(data.rows)[0]
    })
 
 })
@@ -36,14 +38,14 @@ const getLatestRecipe = asyncHandler(async(req, res) => {
    }
    
    res.status(200).json({
-      data: data.rows,
+      data: getStatic(data.rows),
    })
 })
 
 const createRecipe = asyncHandler(async(req, res) => {
-   const photo = `${process.env.BASE_URL}/static/images/${req.files.photo.filename}`
+   const photo = `/static/images/${req.files.photo[0].filename}`
    const videos = req.files.videos.map(video => {
-      return `${process.env.BASE_URL}/static/videos/${video.filename}`
+      return `/static/videos/${video.filename}`
    })
 
    const recipe = { photo, videos, ...req.body }
@@ -61,6 +63,19 @@ const updateRecipe = asyncHandler(async(req, res) => {
    const data = await findById(id)
    const recipe = data.rows[0]
 
+   if(recipe.photo) {
+      const filename = recipe.photo.split('/')[3]
+      deleteFiles('images', [filename])
+   }
+
+   if(recipe.videos) {
+      const files = recipe.video.map(item => {
+         return item.split('/')[3]
+      })
+
+      deleteFiles('videos', files)
+   }
+
    await update({ id, ...req.body })
    
    res.status(200).json({
@@ -72,6 +87,19 @@ const deleteRecipe = asyncHandler(async(req, res) => {
    const { id } = req.params
    const data = await findById(id)
    const recipe = data.rows[0]
+
+   if(recipe.photo) {
+      const filename = recipe.photo.split('/')[3]
+      deleteFiles('images', [filename])
+   }
+
+   if(recipe.videos) {
+      const files = recipe.videos.map(item => {
+         return item.split('/')[3]
+      })
+
+      deleteFiles('videos', files)
+   }
 
    await destroy(id)
 
