@@ -8,7 +8,7 @@ const storage = multer.diskStorage({
          callback(null, path.join(__dirname, `../public/videos`))
       }
       
-      if(file.fieldname === 'photo') {
+      if(file.fieldname === 'photo' || file.fieldname === 'avatar') {
          callback(null, path.join(__dirname, `../public/images`))
       }
    },
@@ -44,7 +44,7 @@ const videoFileHandler = (req, file, callback) => {
 }
 
 const fileFilter = (req, file, callback) => {
-   if(file.fieldname === 'photo') {
+   if(file.fieldname === 'photo' || file.fieldname === 'avatar') {
       imageFileHandler(req, file, callback)
    }
 
