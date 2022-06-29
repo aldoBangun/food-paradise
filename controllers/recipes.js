@@ -60,6 +60,11 @@ const createRecipe = asyncHandler(async(req, res) => {
 
 const updateRecipe = asyncHandler(async(req, res) => {
    const { id } = req.params
+   const photo = `/static/images/${req.files.photo[0].filename}`
+   const videos = req.files.videos.map((video) => {
+      return `/static/videos/${video.filename}`
+   })
+
    const data = await findById(id)
    const recipe = data.rows[0]
 
@@ -76,7 +81,7 @@ const updateRecipe = asyncHandler(async(req, res) => {
       deleteFiles('videos', files)
    }
 
-   await update({ id, ...req.body })
+   await update({ id, photo, videos, ...req.body })
    
    res.status(200).json({
       message: `Succesfully updated recipe with an id of ${recipe.recipe_id}`
