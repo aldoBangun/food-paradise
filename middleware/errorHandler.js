@@ -11,15 +11,19 @@ const errorHandler = (err, req, res, next) => {
    }
 
    if(error.code === '42P01') {
-      error = new ErrorResponse('Database Error', 500)
+      error = new ErrorResponse('Database Error')
    }
 
    if(error.code === '42703') {
-      error = new ErrorResponse('Database Error: Insert data failed', 500)
+      error = new ErrorResponse('Database Error: Insert data failed')
    }
 
    if(error.code === '23505') {
       error = new ErrorResponse(error.detail, 400)
+   }
+
+   if(error.code === 'LIMIT_UNEXPECTED_FILE') {
+      error = new ErrorResponse("Too much content")
    }
 
    res.status(error.status || 500).json({
