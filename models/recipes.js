@@ -26,8 +26,18 @@ const findById = (id) => {
 
 const findByUsername = (name) => {
    return new Promise((resolve, reject) => {
-      db.query('SELECT * FROM recipes INNER JOIN users ON recipes.user_id=users.user_id WHERE name=$1',
-      [name], (err, result) => {
+      db.query('SELECT * FROM recipes INNER JOIN users ON recipes.user_id=users.user_id WHERE name LIKE $1',
+      [`%${name}%`], (err, result) => {
+         if(err) return reject(err)
+         resolve(result)
+      })
+   })
+}
+
+const findByTitle = (title) => {
+   return new Promise((resolve, reject) => {
+      db.query('SELECT * FROM recipes INNER JOIN users ON recipes.user_id=users.user_id WHERE title LIKE $1',
+      [`%${title}%`],(err, result) => {
          if(err) return reject(err)
          resolve(result)
       })
@@ -78,4 +88,4 @@ const destroy = (id) => {
 }
 
 
-module.exports = { create, update, destroy, findAll, findById, findByUsername, findLatest }
+module.exports = { create, update, destroy, findAll, findById, findByUsername, findLatest, findByTitle }

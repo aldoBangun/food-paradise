@@ -1,6 +1,6 @@
 const moment = require('moment')
 const asyncHandler = require('../middleware/asyncHandler')
-const { findAll, create, findById, findByUsername, findLatest, update, destroy } = require('../models/recipes')
+const { findAll, create, findById, findByUsername, findLatest, update, destroy, findByTitle } = require('../models/recipes')
 const deleteFiles = require('../utils/deleteFiles')
 const getStatic = require('../utils/getStatic')
 
@@ -10,6 +10,8 @@ const getRecipes = asyncHandler(async(req, res) => {
    
    if(req.query.name) {
       data = await findByUsername(req.query.name)
+   } else if(req.query.title){
+      data = await findByTitle(req.query.title)
    } else {
       data = await findAll()
    }
