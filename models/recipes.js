@@ -34,9 +34,9 @@ const findByUsername = (name) => {
    })
 }
 
-const findLatest = () => {
+const findLatest = (limit) => {
    return new Promise((resolve, reject) => {
-      db.query('SELECT * FROM recipes ORDER BY created_at DESC', (err, result) => {
+      db.query('SELECT * FROM recipes ORDER BY created_at DESC LIMIT $1', [limit], (err, result) => {
          if(err) return reject(err)
          resolve(result)
       })
