@@ -9,19 +9,20 @@ const {
    deleteRecipe
 } = require('../controllers/recipes')
 const { getCommentById, getCommentByRecipe, createComment, updateComment, deleteComment } = require('../controllers/comments')
-
+const { tokenVerify } = require('../middleware/jwt')
+const uploadFields = [{name: 'photo'}, {name: 'videos', maxCount: 4}]
 
 router.route('/')
    .get(getRecipes)
-   .post(upload.fields([{name: 'photo'}, {name: 'videos', maxCount: 4}]),createRecipe)
+   .post(upload.fields(uploadFields),createRecipe)
 
 router.route('/latest').get(getLatestRecipe)
 
-router.route('/:id').get(getRecipeById).patch(updateRecipe).delete(deleteRecipe)
+router.route('/:id').get(tokenVerify,  getRecipeById).patch(tokenVerify, upload.fields(uploadFields), updateRecipe).delete(tokenVerify, deleteRecipe)
 
-router.route('/:id/comments').get(getCommentByRecipe).post(createComment)
+router.route('/:id/comments').get(getCommentByRecipe).post(tokenVerify, createComment)
 
-router.route('/:id/comments/:commentId').get(getCommentById).patch(updateComment).delete(deleteComment)
+router.route('/:id/comments/:commentId').get(getCommentById).patch(tokenVerify, updateComment).delete(tokenVerify, deleteComment)
 
 
 module.exports = router
