@@ -3,83 +3,82 @@ const asyncHandler = require('../middleware/asyncHandler')
 const { create, update, destroy, findById, findByRecipeId, findAll } = require('../models/comments')
 const recipeModel = require('../models/recipes')
 
+const getComments = asyncHandler(async (req, res) => {
+  const data = await findAll()
 
-const getComments = asyncHandler(async(req, res) => {
-   const data = await findAll()
-
-   res.status(200).json({
-      data: data.rows,
-      length: data.rowCount
-   })
+  res.status(200).json({
+    data: data.rows,
+    length: data.rowCount
+  })
 })
 
-const getCommentById = asyncHandler(async(req, res) => {
-   const { id, commentId } = req.params
-   
-   await recipeModel.findById(id)
+const getCommentById = asyncHandler(async (req, res) => {
+  const { id, commentId } = req.params
 
-   const data = await findById(commentId)
+  await recipeModel.findById(id)
 
-   res.status(200).json({
-      data: data.rows[0]
-   })
+  const data = await findById(commentId)
+
+  res.status(200).json({
+    data: data.rows[0]
+  })
 })
 
-const getCommentByRecipe = asyncHandler(async(req, res) => {
-   const { id } = req.params
-   const data = await findByRecipeId(id) 
+const getCommentByRecipe = asyncHandler(async (req, res) => {
+  const { id } = req.params
+  const data = await findByRecipeId(id)
 
-   res.status(200).json({
-      data: data.rows,
-      length: data.rowCount
-   })
+  res.status(200).json({
+    data: data.rows,
+    length: data.rowCount
+  })
 })
 
-const createComment = asyncHandler(async(req, res) => {
-   const { id } = req.params
-   const { message, user_id } = req.body
-   const currentTime = moment().format()
-   const comment = { 
-      message,
-      user_id,
-      created_at: currentTime,
-      recipe_id: id 
-   }
-   
-   await create(comment)
+const createComment = asyncHandler(async (req, res) => {
+  const { id } = req.params
+  const { message } = req.body
+  const userId = req.body.user_id
+  const currentTime = moment().format()
+  const comment = {
+    message,
+    userId,
+    createdAt: currentTime,
+    recipeId: id
+  }
 
-   res.status(201).json({
-      message: "Successfully create a new comment"
-   })
+  await create(comment)
+
+  res.status(201).json({
+    message: 'Successfully create a new comment'
+  })
 })
 
-const updateComment = asyncHandler(async(req, res) => {
-   const { commentId } = req.params
-   
-   await findById(commentId)
+const updateComment = asyncHandler(async (req, res) => {
+  const { commentId } = req.params
 
-   const newComment = {
-      id: commentId,
-      message: req.body.message
-   }
+  await findById(commentId)
 
-   await update(newComment)
+  const newComment = {
+    id: commentId,
+    message: req.body.message
+  }
 
-   res.status(200).json({
-      message: `Successfully updated a comment with an id of ${commentId}`
-   })
+  await update(newComment)
+
+  res.status(200).json({
+    message: `Successfully updated a comment with an id of ${commentId}`
+  })
 })
 
-const deleteComment = asyncHandler(async(req, res) => {
-   const { commentId } = req.params
+const deleteComment = asyncHandler(async (req, res) => {
+  const { commentId } = req.params
 
-   await findById(commentId)
-   await destroy(commentId)
+  await findById(commentId)
+  await destroy(commentId)
 
-   res.status(200).json({
-      message: `Successfully deleted a comment with an id of ${commentId}`
-   })
+  res.status(200).json({
+    message: `Successfully deleted a comment with an id of ${commentId}`
+  })
 })
-
 
 module.exports = { getCommentById, getCommentByRecipe, createComment, updateComment, deleteComment, getComments }

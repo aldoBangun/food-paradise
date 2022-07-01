@@ -4,7 +4,7 @@
   "description": "food paradise RESTful API",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon"
+    "dev": "standard && nodemon index.js"
   },
   "repository": {
     "type": "git",
@@ -23,8 +23,8 @@
   },
   "homepage": "https://github.com/aldobangun/food-paradise#readme",
   "devDependencies": {
-    "eslint": "^8.18.0",
-    "nodemon": "^2.0.16"
+    "nodemon": "^2.0.16",
+    "standard": "^17.0.0"
   },
   "dependencies": {
     "bcrypt": "^5.0.1",

@@ -18,7 +18,6 @@ const routeUsers = require('./routes/users')
 const routeRecipes = require('./routes/recipes')
 const routeComments = require('./routes/comments')
 
-
 createStatic()
 
 app.use(helmet())
@@ -36,7 +35,6 @@ app.use('/comments', routeComments)
 app.use(notFound)
 app.use(errorHandler)
 
-
-app.listen(PORT, ()=> {
-   console.log(`App is running on http://localhost:${PORT}`)
+app.listen(PORT, () => {
+  console.log(`App is running on http://localhost:${PORT}`)
 })
