@@ -14,15 +14,21 @@ const uploadFields = [{name: 'photo'}, {name: 'videos', maxCount: 4}]
 
 router.route('/')
    .get(getRecipes)
-   .post(upload.fields(uploadFields),createRecipe)
+   .post(tokenVerify, upload.fields(uploadFields), createRecipe)
 
 router.route('/latest').get(getLatestRecipe)
 
-router.route('/:id').get(tokenVerify,  getRecipeById).patch(tokenVerify, upload.fields(uploadFields), updateRecipe).delete(tokenVerify, deleteRecipe)
+router.route('/:id')
+   .get(tokenVerify,  getRecipeById)
+   .patch(tokenVerify, upload.fields(uploadFields), updateRecipe)
+   .delete(tokenVerify, deleteRecipe)
 
 router.route('/:id/comments').get(getCommentByRecipe).post(tokenVerify, createComment)
 
-router.route('/:id/comments/:commentId').get(getCommentById).patch(tokenVerify, updateComment).delete(tokenVerify, deleteComment)
+router.route('/:id/comments/:commentId')
+   .get(getCommentById)
+   .patch(tokenVerify, updateComment)
+   .delete(tokenVerify, deleteComment)
 
 
 module.exports = router
