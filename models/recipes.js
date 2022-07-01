@@ -53,6 +53,15 @@ const findLatest = (limit) => {
    })
 }
 
+const findByPage = (limit, page) => {
+   return new Promise((resolve, reject) => {
+      db.query('SELECT * FROM recipes LIMIT $1 OFFSET $2', [limit, page], (err, result) => {
+         if(err) return reject(err)
+         resolve(result)
+      })
+   })
+}
+
 const create = (recipe) => {
    const { title, ingredients, photo, videos, created_at, user_id } = recipe
 
@@ -88,4 +97,4 @@ const destroy = (id) => {
 }
 
 
-module.exports = { create, update, destroy, findAll, findById, findByUsername, findLatest, findByTitle }
+module.exports = { create, update, destroy, findAll, findById, findByUsername, findLatest, findByTitle, findByPage }
