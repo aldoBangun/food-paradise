@@ -1,33 +1,42 @@
 # Food Paradise RESTful API
 > Food Recipe API created with ExpressJS and PostgreSQL
 
-### Instruction
-Buatlah API dari aplikasi dibawah ini: 
-https://www.figma.com/file/SUbBTYCq1e4ngRt20lSdqr/Food-Recipe?node-id=47%3A1273
+### Demo App
 
-### Goals
-- Flowchart Aplikasi
-- Table (Recipe, User, Comment) ✔️
-- CRUD ✔️
-- Comment by resep (opsional)
-- Resep by user (opsional)
-- Pencarian Resep berdasarkan nama 
-- Resep terbaru maksimal 5 
-- Pagination (opsional)
-- Linter ✔️
-- Error Handling ✔️
-- Cors ✔️
-- ENV ✔️
-- Dokumentasi Postman ✔️
-- Gunakan Bahasa Inggris untuk nama File dan Fungsi ✔️
-- Upload/push tugas kamu ke GitHub dan gunakan nama yang profesional ✔️
-- Dapat didemokan menggunakan postman ✔️
-- Presentasikan apa yang telah Anda lakukan dalam minggu ini
-- Jelaskan dengan bahasa kalian sendiri apa itu dan konsep tentang:
+1. Clone this repo 
 
-   1. Node JS
-   2. Express
-   3. postgreSQL
-   4. REST API
+   ``` 
+   git clone https://github.com/aldobangun/food-paradise.git food-paradise
+   ```
 
-- Ceritakan dan Demokan tentang proyek ini
+2. Go to app directory
+
+   ```
+   cd food-paradise
+   ```
+
+3. Install dependencies using `npm install`
+4. Create new database named `food_paradise`
+5. Create database tables by running this command in your terminal
+
+   ```
+   psql -U <db_username> -h <db_host> -p <db_port> -d <db_name> -f config/tables.sql
+   ```
+
+   for example: 
+
+   ```
+   psql -U postgres -h localhost -p 5432 -d food_paradise -f config/tables.sql
+   ```
+
+   and then enter your database password
+
+6. Rename `.env.example` to `.env`
+7. Open `.env` and insert your environment variables there
+8. Run the server using `npm run dev`
+9. [Download](https://www.postman.com/downloads/) or Open Postman
+10. To easily test the API you can download and import this [postman collection](https://drive.google.com/file/d/1oYDpf51dxbIa4T9JpgWm3FGH3s6namFa/view?usp=sharing) to your postman
+
+### API Documentation
+
+Here is the API [Documentation](https://documenter.getpostman.com/view/13579110/UzBsKQv8) created by [Postman](https://www.postman.com/)
