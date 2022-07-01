@@ -73,7 +73,7 @@ const updateRecipe = asyncHandler(async(req, res) => {
    }
 
    if(recipe.videos) {
-      const files = recipe.video.map(item => {
+      const files = recipe.videos.map(item => {
          return item.split('/')[3]
       })
 
