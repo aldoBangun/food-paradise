@@ -22,6 +22,7 @@ const storage = multer.diskStorage({
 })
 
 const imageFileHandler = (req, file, callback) => {
+   const ONE_MEGA_BYTE = 1024 * 1024
    const isValidMimeType = file.mimetype == 'image/png' || file.mimetype == 'image/jpg' || file.mimetype == 'image/jpeg'
 
    if(!isValidMimeType) {
@@ -29,14 +30,25 @@ const imageFileHandler = (req, file, callback) => {
       return
    }
 
+   if(file?.size > ONE_MEGA_BYTE) {
+      callback(new Error('Image cannot be more than 1 MB'), false)
+      return
+   }
+
    callback(null, true)
 }
 
 const videoFileHandler = (req, file, callback) => {
+   const ONE_HUNDRED_MEGA_BYTE = 100 * 1024 * 1024
    const isValidMimeType = file.mimetype == 'video/mp4' || file.mimetype == 'video/webm' || file.mimetype == 'video/quicktime'
 
    if(!isValidMimeType) {
       callback(new Error('Only accept .mp4, .webm, .mov video format'), false)
+      return
+   }
+
+   if(file?.size > ONE_HUNDRED_MEGA_BYTE) {
+      callback(new Error('Video cannot be more than 100 MB'), false)
       return
    }
 
