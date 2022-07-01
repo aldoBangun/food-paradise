@@ -1,24 +1,53 @@
 const moment = require('moment')
 const asyncHandler = require('../middleware/asyncHandler')
-const { findAll, create, findById, findByUsername, findLatest, update, destroy, findByTitle } = require('../models/recipes')
+const { findAll, create, findById, findByUsername, findLatest, update, destroy, findByTitle, findByPage } = require('../models/recipes')
 const deleteFiles = require('../utils/deleteFiles')
+const ErrorResponse = require('../utils/ErrorResponse')
 const getStatic = require('../utils/getStatic')
 
+const getRecipeByPage = async(req, res) => {
+   const { limit, page } = req.query
+   const recipes = await findAll()
+   const totalPage = Math.ceil(recipes.rowCount / limit)
+   const isValidInput = (page <= totalPage) && (+page > 0)
+
+   if(!isValidInput) {
+      throw new ErrorResponse('Page Not Found', 404)
+   }
+
+   const offset = (+page - 1) * +limit
+   const data = await findByPage(limit, offset)
+   const pageCount = `${page} of ${totalPage}`
+   const totalData = recipes.rowCount
+
+   res.status(200).json({
+      data: getStatic(data.rows),
+      length: data.rowCount,
+      page: pageCount,
+      totalData
+   })
+}
 
 const getRecipes = asyncHandler(async(req, res) => {
    let data = []
-   
+
+   if(req.query.page && req.query.limit){
+      await getRecipeByPage(req, res)
+   } 
+
    if(req.query.name) {
       data = await findByUsername(req.query.name)
+
    } else if(req.query.title){
       data = await findByTitle(req.query.title)
+
    } else {
       data = await findAll()
    }
 
    res.status(200).json({
       data: getStatic(data.rows),
-      length: data.rowCount
+      length: data.rowCount,
    })
 })
 
