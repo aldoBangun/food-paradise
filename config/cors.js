@@ -1,4 +1,4 @@
-const whiteList = ['http://localhost:3000', "*"]
+const whiteList = ['http://localhost:3000', 'https://food-paradise-app.herokuapp.com:57779']
 
 const corsOptions = {
   origin: (origin, callback) => {
