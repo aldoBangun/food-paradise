@@ -28,6 +28,10 @@ app.use(bodyParser.json())
 app.use(morgan('dev'))
 app.use('/static', express.static(path.join(__dirname, 'public')))
 
+app.use('/', (req, res) => {
+  res.send('https://documenter.getpostman.com/view/13579110/UzBsKQv8')
+})
+
 app.use('/auth', routeAuth)
 app.use('/users', routeUsers)
 app.use('/recipes', routeRecipes)
