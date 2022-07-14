@@ -9,7 +9,7 @@ const bodyParser = require('body-parser')
 const morgan = require('morgan')
 const app = express()
 const createStatic = require('./utils/createStatic')
-const PORT = process.env.PORT || 8000
+const PORT = process.env.PORT || 5000
 const corsOptions = require('./config/cors')
 
 const notFound = require('./routes/notFound')
