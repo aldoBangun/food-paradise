@@ -1,10 +1,7 @@
-const whiteList = ['http://localhost:3000', 'https://www.github.com', 'https://food-paradise-app.herokuapp.com', 'https://youtube.com']
+const whiteList = ['http://localhost:3000', 'https://food-paradise-app.herokuapp.com']
 
 const corsOptionsDelegate = function (req, callback) {
-  if (whiteList.indexOf(req.header('Origin')) !== -1) {
-    callback(null, { origin: false })
-    return
-  }
+  if (whiteList.indexOf(req.header('Origin')) !== -1) return callback(null, { origin: true })
   callback(null, { origin: false })
 }
 
