@@ -4,7 +4,9 @@
   "description": "food paradise RESTful API",
   "main": "index.js",
   "scripts": {
-    "dev": "standard && nodemon index.js"
+    "dev": "standard && nodemon index.js",
+    "prod": "set NODE_ENV=production&& nodemon index.js",
+    "start": "node index.js"
   },
   "repository": {
     "type": "git",
