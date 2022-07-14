@@ -10,7 +10,7 @@ const morgan = require('morgan')
 const app = express()
 const createStatic = require('./utils/createStatic')
 const PORT = process.env.PORT || 5000
-// const corsOptions = require('./config/cors')
+const corsOptions = require('./config/cors')
 
 const notFound = require('./routes/notFound')
 const errorHandler = require('./middleware/errorHandler')
@@ -22,7 +22,7 @@ const routeComments = require('./routes/comments')
 createStatic()
 
 app.use(helmet())
-app.use(cors())
+app.use(cors(corsOptions))
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 app.use(morgan('dev'))
