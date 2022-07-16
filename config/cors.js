@@ -1,6 +1,6 @@
 const whiteList = ['https://food-paradise-react.web.app', 'https://food-paradise-app.herokuapp.com']
 
-if(process.env.NODE_ENV !== 'production') {
+if (process.env.NODE_ENV !== 'production') {
   whiteList.push('http://localhost:3000')
 }
 
