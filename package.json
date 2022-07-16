@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "standard && nodemon index.js",
     "prod": "set NODE_ENV=production&& nodemon index.js",
-    "start": "node index.js"
+    "start": "node index.js",
+    "lint:fix": "standard --fix"
   },
   "repository": {
     "type": "git",
