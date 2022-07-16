@@ -21,7 +21,7 @@ const routeComments = require('./routes/comments')
 
 createStatic()
 
-app.use(helmet())
+app.use(helmet.crossOriginResourcePolicy({ policy: 'cross-origin' }))
 app.use(cors(corsOptionsDelegate))
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
