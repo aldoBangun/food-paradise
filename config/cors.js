@@ -1,10 +1,12 @@
-const whiteList = ['http://localhost:3000', "*"]
+const whiteList = ['https://food-paradise-react.web.app', 'https://food-paradise-app.herokuapp.com']
 
-const corsOptions = {
-  origin: (origin, callback) => {
-    if (whiteList.indexOf(origin) !== -1) return callback(null, true)
-    callback(new Error('Not Allowed by CORS'))
-  }
+if (process.env.NODE_ENV !== 'production') {
+  whiteList.push('http://localhost:3000')
 }
 
-module.exports = corsOptions
+const corsOptionsDelegate = function (req, callback) {
+  if (whiteList.indexOf(req.header('Origin')) !== -1) return callback(null, { origin: true })
+  callback(null, { origin: false })
+}
+
+module.exports = corsOptionsDelegate
