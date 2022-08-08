@@ -77,6 +77,19 @@ const findByPage = (limit, page) => {
   })
 }
 
+const findByCategory = (category) => {
+  return new Promise((resolve, reject) => {
+    db.query(
+      'SELECT * FROM recipes WHERE category LIKE $1',
+      [`%${category}%`],
+      (err, result) => {
+        if (err) return reject(err)
+        resolve(result)
+      }
+    )
+  })
+}
+
 const create = (recipe) => {
   const {
     title,
@@ -146,4 +159,5 @@ module.exports = {
   findLatest,
   findByTitle,
   findByPage,
+  findByCategory
 }
