@@ -1,6 +1,6 @@
 const moment = require('moment')
 const asyncHandler = require('../middleware/asyncHandler')
-const { findAll, create, findById, findByUsername, findLatest, update, destroy, findByTitle, findByPage } = require('../models/recipes')
+const { findAll, create, findById, findByUsername, findLatest, update, destroy, findByTitle, findByPage, findByCategory } = require('../models/recipes')
 const ErrorResponse = require('../utils/ErrorResponse')
 const cloudinary = require('../config/cloudinary')
 
@@ -38,6 +38,8 @@ const getRecipes = asyncHandler(async (req, res) => {
     data = await findByUsername(req.query.name)
   } else if (req.query.title) {
     data = await findByTitle(req.query.title)
+  } else if (req.query.category) {
+    data = await findByCategory(req.query.category)
   } else {
     data = await findAll()
   }
