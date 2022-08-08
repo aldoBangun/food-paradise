@@ -116,37 +116,32 @@ const updateRecipe = asyncHandler(async (req, res) => {
     return video.path
   }) || []
 
-  const uploadPhoto = await cloudinary.uploader.upload(photo, {
-    upload_preset: 'food-paradise',
-    folder: 'images'
-  })
+  const newRecipe = { id, ...req.body }
 
-  const photoUrl = uploadPhoto.secure_url
-
-  const uploadVideos = []
-
-  for (let i = 0; i < videos?.length; i++) {
-    const result = await cloudinary.uploader.upload(videos[i], {
+  if(photo) {
+    const uploadPhoto = await cloudinary.uploader.upload(photo, {
       upload_preset: 'food-paradise',
-      folder: 'videos',
-      chunk_size: 33337294,
-      resource_type: 'video'
+      folder: 'images'
     })
-
-    uploadVideos.push(result.secure_url)
-  }  
-
-  const newRecipe = {
-    id,
-    ...req.body
+  
+    const photoUrl = uploadPhoto.secure_url
+    newRecipe.photo = photoUrl
   }
 
   if(uploadVideos.length) {
-    newRecipe.videos = uploadVideos
-  }
+    const uploadVideos = []
 
-  if(photo) {
-    newRecipe.photo = photoUrl
+    for (let i = 0; i < videos?.length; i++) {
+      const result = await cloudinary.uploader.upload(videos[i], {
+        upload_preset: 'food-paradise',
+        folder: 'videos',
+        chunk_size: 33337294,
+        resource_type: 'video'
+      })
+      uploadVideos.push(result.secure_url)
+    }  
+    
+    newRecipe.videos = uploadVideos
   }
 
   await update(newRecipe)
