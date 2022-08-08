@@ -1,9 +1,9 @@
 const moment = require('moment')
 const asyncHandler = require('../middleware/asyncHandler')
 const { findAll, create, findById, findByUsername, findLatest, update, destroy, findByTitle, findByPage } = require('../models/recipes')
-const deleteFiles = require('../utils/deleteFiles')
 const ErrorResponse = require('../utils/ErrorResponse')
 const getStatic = require('../utils/getStatic')
+const cloudinary = require('../config/cloudinary')
 
 const getRecipeByPage = async (req, res) => {
   const { limit, page } = req.query
@@ -21,7 +21,7 @@ const getRecipeByPage = async (req, res) => {
   const totalData = recipes.rowCount
 
   res.status(200).json({
-    data: getStatic(data.rows),
+    data: data.rows,
     length: data.rowCount,
     page: pageCount,
     totalData
@@ -43,8 +43,10 @@ const getRecipes = asyncHandler(async (req, res) => {
     data = await findAll()
   }
 
+  console.log(data)
+
   res.status(200).json({
-    data: getStatic(data.rows),
+    data: data.rows,
     length: data.rowCount
   })
 })
@@ -62,19 +64,40 @@ const getLatestRecipe = asyncHandler(async (req, res) => {
   const data = await findLatest(maxResult)
 
   res.status(200).json({
-    data: getStatic(data.rows),
+    data: data.rows,
     length: data.rowCount
   })
 })
 
 const createRecipe = asyncHandler(async (req, res) => {
-  const photo = `/static/images/${req.files.photo[0].filename}`
-  const videos = req.files.videos.map(video => {
-    return `/static/videos/${video.filename}`
+  req.body.userId = parseInt(req?.body?.user_id)
+  const photo = req?.files?.photo[0]?.path
+  const videos = req?.files?.videos?.map(video => {
+    return video.path
   })
 
-  const recipe = { photo, videos, ...req.body }
-  recipe.created_at = moment().format()
+  const uploadPhoto = await cloudinary.uploader.upload(photo, {
+    upload_preset: 'food-paradise',
+    folder: 'images'
+  })
+
+  const photoUrl = uploadPhoto.secure_url
+
+  const uploadVideos = []
+
+  for (let i = 0; i < videos?.length; i++) {
+    const result = await cloudinary.uploader.upload(videos[i], {
+      upload_preset: 'food-paradise',
+      folder: 'videos',
+      chunk_size: 33337294,
+      resource_type: 'video'
+    })
+
+    uploadVideos.push(result.secure_url)
+  }
+
+  const recipe = { photo: photoUrl, videos: uploadVideos, ...req.body }
+  recipe.createdAt = moment().format()
 
   await create(recipe)
 
@@ -85,28 +108,43 @@ const createRecipe = asyncHandler(async (req, res) => {
 
 const updateRecipe = asyncHandler(async (req, res) => {
   const { id } = req.params
-  const photo = `/static/images/${req.files.photo[0].filename}`
-  const videos = req.files.videos.map((video) => {
-    return `/static/videos/${video.filename}`
-  })
-
   const data = await findById(id)
   const recipe = data.rows[0]
+  console.log(req)
+  const photo = req?.files?.photo[0]?.path
+  const videos = req?.files?.videos?.map((video) => {
+    return video.path
+  }) || []
 
-  if (recipe.photo) {
-    const filename = recipe.photo.split('/')[3]
-    deleteFiles('images', [filename])
-  }
+  const newRecipe = { id, ...req.body }
 
-  if (recipe.videos) {
-    const files = recipe.videos.map(item => {
-      return item.split('/')[3]
+  if(photo) {
+    const uploadPhoto = await cloudinary.uploader.upload(photo, {
+      upload_preset: 'food-paradise',
+      folder: 'images'
     })
-
-    deleteFiles('videos', files)
+  
+    const photoUrl = uploadPhoto.secure_url
+    newRecipe.photo = photoUrl
   }
 
-  await update({ id, photo, videos, ...req.body })
+  if(uploadVideos.length) {
+    const uploadVideos = []
+
+    for (let i = 0; i < videos?.length; i++) {
+      const result = await cloudinary.uploader.upload(videos[i], {
+        upload_preset: 'food-paradise',
+        folder: 'videos',
+        chunk_size: 33337294,
+        resource_type: 'video'
+      })
+      uploadVideos.push(result.secure_url)
+    }  
+    
+    newRecipe.videos = uploadVideos
+  }
+
+  await update(newRecipe)
 
   res.status(200).json({
     message: `Succesfully updated recipe with an id of ${recipe.recipe_id}`
@@ -117,19 +155,6 @@ const deleteRecipe = asyncHandler(async (req, res) => {
   const { id } = req.params
   const data = await findById(id)
   const recipe = data.rows[0]
-
-  if (recipe.photo) {
-    const filename = recipe.photo.split('/')[3]
-    deleteFiles('images', [filename])
-  }
-
-  if (recipe.videos) {
-    const files = recipe.videos.map(item => {
-      return item.split('/')[3]
-    })
-
-    deleteFiles('videos', files)
-  }
 
   await destroy(id)
 

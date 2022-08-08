@@ -3,7 +3,7 @@ const ErrorResponse = require('../utils/ErrorResponse')
 
 const findAll = () => {
   return new Promise((resolve, reject) => {
-    db.query('SELECT * FROM recipes INNER JOIN users ON recipes.user_id=users.user_id',
+    db.query('SELECT * FROM recipes',
       (err, result) => {
         if (err) return reject(err)
         resolve(result)
@@ -13,7 +13,7 @@ const findAll = () => {
 
 const findById = (id) => {
   return new Promise((resolve, reject) => {
-    db.query('SELECT * FROM recipes INNER JOIN users ON recipes.user_id=users.user_id WHERE recipe_id=$1',
+    db.query('SELECT * FROM recipes WHERE recipe_id=$1',
       [id], (err, result) => {
         if (err) return reject(err)
         if (result.rowCount) resolve(result)
@@ -25,7 +25,7 @@ const findById = (id) => {
 
 const findByUsername = (name) => {
   return new Promise((resolve, reject) => {
-    db.query('SELECT * FROM recipes INNER JOIN users ON recipes.user_id=users.user_id WHERE name LIKE $1',
+    db.query('SELECT * FROM recipes WHERE name LIKE $1',
       [`%${name}%`], (err, result) => {
         if (err) return reject(err)
         resolve(result)
@@ -35,7 +35,7 @@ const findByUsername = (name) => {
 
 const findByTitle = (title) => {
   return new Promise((resolve, reject) => {
-    db.query('SELECT * FROM recipes INNER JOIN users ON recipes.user_id=users.user_id WHERE title LIKE $1',
+    db.query('SELECT * FROM recipes WHERE title LIKE $1',
       [`%${title}%`], (err, result) => {
         if (err) return reject(err)
         resolve(result)
