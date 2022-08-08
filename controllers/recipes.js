@@ -2,7 +2,6 @@ const moment = require('moment')
 const asyncHandler = require('../middleware/asyncHandler')
 const { findAll, create, findById, findByUsername, findLatest, update, destroy, findByTitle, findByPage } = require('../models/recipes')
 const ErrorResponse = require('../utils/ErrorResponse')
-const getStatic = require('../utils/getStatic')
 const cloudinary = require('../config/cloudinary')
 
 const getRecipeByPage = async (req, res) => {
@@ -55,7 +54,7 @@ const getRecipeById = asyncHandler(async (req, res) => {
   const data = await findById(req.params.id)
 
   res.status(200).json({
-    data: getStatic(data.rows)[0]
+    data: data.rows[0]
   })
 })
 
