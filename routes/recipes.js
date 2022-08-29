@@ -19,7 +19,7 @@ router.route('/')
 router.route('/latest').get(getLatestRecipe)
 
 router.route('/:id')
-  .get(tokenVerify, getRecipeById)
+  .get(getRecipeById)
   .patch(tokenVerify, upload.fields(uploadFields), updateRecipe)
   .delete(tokenVerify, deleteRecipe)
 

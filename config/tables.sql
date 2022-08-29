@@ -13,6 +13,9 @@ CREATE TABLE IF NOT EXISTS recipes(
    ingredients text[],
    photo varchar(255),
    videos varchar[],
+   category varchar(255),
+   variant varchar(255),
+   restaurant varchar(255),
    created_at timestamp,
    user_id int REFERENCES users(user_id)
 );

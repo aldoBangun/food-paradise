@@ -38,6 +38,15 @@ const findByUsername = (name) => {
   })
 }
 
+const findByUserId = (userId) => {
+  return new Promise((resolve, reject) => {
+    db.query('SELECT * FROM recipes WHERE user_id=$1', [userId], (err, result) => {
+      if (err) return reject(err)
+      resolve(result)
+    })
+  })
+}
+
 const findByTitle = (title) => {
   return new Promise((resolve, reject) => {
     db.query(
@@ -100,7 +109,7 @@ const create = (recipe) => {
     userId,
     category,
     variant,
-    restaurant,
+    restaurant
   } = recipe
 
   return new Promise((resolve, reject) => {
@@ -115,7 +124,7 @@ const create = (recipe) => {
         userId,
         category,
         variant,
-        restaurant,
+        restaurant
       ],
       (err, result) => {
         if (err) return reject(err)
@@ -156,6 +165,7 @@ module.exports = {
   findAll,
   findById,
   findByUsername,
+  findByUserId,
   findLatest,
   findByTitle,
   findByPage,

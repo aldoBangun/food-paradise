@@ -1,6 +1,6 @@
 const moment = require('moment')
 const asyncHandler = require('../middleware/asyncHandler')
-const { findAll, create, findById, findByUsername, findLatest, update, destroy, findByTitle, findByPage, findByCategory } = require('../models/recipes')
+const { findAll, create, findById, findByUsername, findLatest, update, destroy, findByTitle, findByPage, findByCategory, findByUserId } = require('../models/recipes')
 const ErrorResponse = require('../utils/ErrorResponse')
 const cloudinary = require('../config/cloudinary')
 
@@ -44,8 +44,6 @@ const getRecipes = asyncHandler(async (req, res) => {
     data = await findAll()
   }
 
-  console.log(data)
-
   res.status(200).json({
     data: data.rows,
     length: data.rowCount
@@ -75,7 +73,7 @@ const createRecipe = asyncHandler(async (req, res) => {
   const photo = req?.files?.photo[0]?.path
   const videos = req?.files?.videos?.map(video => {
     return video.path
-  })
+  }) || []
 
   const uploadPhoto = await cloudinary.uploader.upload(photo, {
     upload_preset: 'food-paradise',
@@ -97,8 +95,14 @@ const createRecipe = asyncHandler(async (req, res) => {
     uploadVideos.push(result.secure_url)
   }
 
-  const recipe = { photo: photoUrl, videos: uploadVideos, ...req.body }
-  recipe.createdAt = moment().format()
+  const recipe = { 
+    userId: req.body.user_id,
+    title: req.body.title,
+    ingredients: req.body.ingredients,
+    photo: photoUrl,
+    videos: uploadVideos,
+    createdAt: moment().format()
+  }
 
   await create(recipe)
 
@@ -111,7 +115,6 @@ const updateRecipe = asyncHandler(async (req, res) => {
   const { id } = req.params
   const data = await findById(id)
   const recipe = data.rows[0]
-  console.log(req)
   const photo = req?.files?.photo[0]?.path
   const videos = req?.files?.videos?.map((video) => {
     return video.path
@@ -119,17 +122,17 @@ const updateRecipe = asyncHandler(async (req, res) => {
 
   const newRecipe = { id, ...req.body }
 
-  if(photo) {
+  if (photo) {
     const uploadPhoto = await cloudinary.uploader.upload(photo, {
       upload_preset: 'food-paradise',
       folder: 'images'
     })
-  
+
     const photoUrl = uploadPhoto.secure_url
     newRecipe.photo = photoUrl
   }
 
-  if(uploadVideos.length) {
+  if (videos.length) {
     const uploadVideos = []
 
     for (let i = 0; i < videos?.length; i++) {
@@ -140,8 +143,8 @@ const updateRecipe = asyncHandler(async (req, res) => {
         resource_type: 'video'
       })
       uploadVideos.push(result.secure_url)
-    }  
-    
+    }
+
     newRecipe.videos = uploadVideos
   }
 
