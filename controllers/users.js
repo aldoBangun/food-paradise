@@ -37,7 +37,7 @@ const updateUser = asyncHandler(async (req, res) => {
   const user = data.rows[0]
   const avatar = req?.file?.path
 
-  const newUser = { 
+  const newUser = {
     id,
     name: req.body.name || user.name,
     email: req.body.email || user.email,

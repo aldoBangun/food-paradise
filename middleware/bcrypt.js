@@ -5,7 +5,7 @@ const saltRounds = 10
 
 const passwordHash = asyncHandler((req, res, next) => {
   if (!req.body.password) return next()
-  
+
   bcrypt.hash(req.body.password, saltRounds, (err, result) => {
     if (err) throw new ErrorResponse(err.message, 500)
     req.body.password = result

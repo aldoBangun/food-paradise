@@ -10,7 +10,7 @@ router.route('/:id')
   .get(getUser)
   .patch(tokenVerify, upload.single('avatar'), passwordHash, updateUser)
   .delete(tokenVerify, deleteUser)
-  
+
 router.route('/:id/recipes')
   .get(getUserRecipes)
 

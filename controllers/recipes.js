@@ -1,6 +1,6 @@
 const moment = require('moment')
 const asyncHandler = require('../middleware/asyncHandler')
-const { findAll, create, findById, findByUsername, findLatest, update, destroy, findByTitle, findByPage, findByCategory, findByUserId } = require('../models/recipes')
+const { findAll, create, findById, findByUsername, findLatest, update, destroy, findByTitle, findByPage, findByCategory } = require('../models/recipes')
 const ErrorResponse = require('../utils/ErrorResponse')
 const cloudinary = require('../config/cloudinary')
 
@@ -95,7 +95,7 @@ const createRecipe = asyncHandler(async (req, res) => {
     uploadVideos.push(result.secure_url)
   }
 
-  const recipe = { 
+  const recipe = {
     userId: req.body.user_id,
     title: req.body.title,
     ingredients: req.body.ingredients,

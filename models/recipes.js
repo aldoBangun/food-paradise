@@ -3,7 +3,7 @@ const ErrorResponse = require('../utils/ErrorResponse')
 
 const findAll = () => {
   return new Promise((resolve, reject) => {
-    db.query('SELECT * FROM recipes', (err, result) => {
+    db.query('SELECT * FROM recipes ORDER BY created_at DESC', (err, result) => {
       if (err) return reject(err)
       resolve(result)
     })
@@ -28,7 +28,7 @@ const findById = (id) => {
 const findByUsername = (name) => {
   return new Promise((resolve, reject) => {
     db.query(
-      'SELECT * FROM recipes WHERE name LIKE $1',
+      'SELECT * FROM recipes WHERE name LIKE $1 ORDER BY created_at DESC',
       [`%${name}%`],
       (err, result) => {
         if (err) return reject(err)
@@ -40,7 +40,7 @@ const findByUsername = (name) => {
 
 const findByUserId = (userId) => {
   return new Promise((resolve, reject) => {
-    db.query('SELECT * FROM recipes WHERE user_id=$1', [userId], (err, result) => {
+    db.query('SELECT * FROM recipes WHERE user_id=$1 ORDER BY created_at DESC', [userId], (err, result) => {
       if (err) return reject(err)
       resolve(result)
     })
@@ -76,7 +76,7 @@ const findLatest = (limit) => {
 const findByPage = (limit, page) => {
   return new Promise((resolve, reject) => {
     db.query(
-      'SELECT * FROM recipes LIMIT $1 OFFSET $2',
+      'SELECT * FROM recipes ORDER BY created_at DESC LIMIT $1 OFFSET $2',
       [limit, page],
       (err, result) => {
         if (err) return reject(err)
