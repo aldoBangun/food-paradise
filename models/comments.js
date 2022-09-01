@@ -25,7 +25,7 @@ const findById = (id) => {
 }
 
 const findByRecipeId = (id) => {
-  const query = 'SELECT * FROM comments INNER JOIN users ON comments.user_id=users.user_id INNER JOIN recipes ON comments.recipe_id=recipes.recipe_id WHERE comments.recipe_id=$1'
+  const query = 'SELECT * FROM comments INNER JOIN users ON comments.user_id=users.user_id INNER JOIN recipes ON comments.recipe_id=recipes.recipe_id WHERE comments.recipe_id=$1 ORDER BY comment_id DESC'
 
   return new Promise((resolve, reject) => {
     db.query(query, [id], (err, result) => {

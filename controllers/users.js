@@ -1,6 +1,7 @@
 const asyncHandler = require('../middleware/asyncHandler')
 const { update, destroy, findAll, findById } = require('../models/users')
 const cloudinary = require('../config/cloudinary')
+const { findByUserId: findRecipeByUserId } = require('../models/recipes')
 
 const getUsers = asyncHandler(async (req, res) => {
   const users = await findAll()
@@ -20,19 +21,36 @@ const getUser = asyncHandler(async (req, res) => {
   })
 })
 
+const getUserRecipes = asyncHandler(async (req, res) => {
+  const userId = req.params.id
+  const userRecipe = await findRecipeByUserId(userId)
+
+  res.status(200).json({
+    data: userRecipe.rows,
+    length: userRecipe.rowCount
+  })
+})
+
 const updateUser = asyncHandler(async (req, res) => {
   const { id } = req.params
   const data = await findById(id)
   const user = data.rows[0]
   const avatar = req?.file?.path
 
-  const newUser = { id, ...req.body }
-  
-  if(avatar) {
+  const newUser = {
+    id,
+    name: req.body.name || user.name,
+    email: req.body.email || user.email,
+    password: req.body.password || user.password,
+    phone: req.body.phone || user.phone,
+    avatar: user.avatar
+  }
+
+  if (avatar) {
     const uploadAvatar = await cloudinary.uploader.upload(avatar, {
       upload_preset: 'food-paradise',
       folder: 'images'
-    })    
+    })
 
     const avatarUrl = uploadAvatar.secure_url
     newUser.avatar = avatarUrl
@@ -56,4 +74,4 @@ const deleteUser = asyncHandler(async (req, res) => {
   })
 })
 
-module.exports = { getUsers, getUser, updateUser, deleteUser }
+module.exports = { getUsers, getUser, getUserRecipes, updateUser, deleteUser }
