@@ -1,7 +1,10 @@
 # Food Paradise RESTful API
 > Food Recipe API created with ExpressJS and PostgreSQL
 
-### Demo App
+### Demo API
+[Food Paradise REST API](https://food-paradise-app.herokuapp.com/)
+
+### Usage for development
 
 1. Clone this repo 
 
@@ -35,8 +38,10 @@
 7. Open `.env` and insert your environment variables there
 8. Run the server using `npm run dev`
 9. [Download](https://www.postman.com/downloads/) or Open Postman
-10. To easily test the API you can download and import this [postman collection](https://drive.google.com/file/d/1oYDpf51dxbIa4T9JpgWm3FGH3s6namFa/view?usp=sharing) to your postman
+10. To easily test the API you can download and import this [postman collection](https://drive.google.com/file/d/1oYDpf51dxbIa4T9JpgWm3FGH3s6namFa/view?usp=sharing) to your postman or you can get it on API Documentation below
 
 ### API Documentation
 
-Here is the API [Documentation](https://documenter.getpostman.com/view/13579110/UzBsKQv8) created by [Postman](https://www.postman.com/)
+- Here is the API [Documentation](https://documenter.getpostman.com/view/13579110/UzBsKQv8) created by [Postman](https://www.postman.com/)
+
+- Alternatively u can use this (Deployed) [API Documentation](https://documenter.getpostman.com/view/13579110/VUxPtRsD) for testing the API
