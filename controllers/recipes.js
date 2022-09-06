@@ -27,17 +27,45 @@ const getRecipeByPage = async (req, res) => {
   })
 }
 
+const getRecipeByTitle = async (req, res) => {
+  let data = []
+
+  const allowedSortBy = ['title', 'created_at']
+  const allowedSortType = ['ASC', 'DESC']
+
+  if (req.query.sort && req.query.order) {
+    const validSort = allowedSortBy.indexOf(req.query.sort) !== -1
+    const validOrder = allowedSortType.indexOf(req.query.order) !== -1
+
+    if (validSort && validOrder) {
+      data = await findByTitle(req.query.title, req.query.sort, req.query.order)
+    } else {
+      data = await findByTitle(req.query.title)
+    }
+
+  } else {
+    data = await findByTitle(req.query.title)
+  }
+
+  res.status(200).json({
+    data: data.rows,
+    length: data.rowCount
+  })  
+}
+
 const getRecipes = asyncHandler(async (req, res) => {
   let data = []
 
   if (req.query.page && req.query.limit) {
     await getRecipeByPage(req, res)
+    return
   }
 
   if (req.query.name) {
     data = await findByUsername(req.query.name)
   } else if (req.query.title) {
-    data = await findByTitle(req.query.title)
+    await getRecipeByTitle(req, res)
+    return
   } else if (req.query.category) {
     data = await findByCategory(req.query.category)
   } else {
