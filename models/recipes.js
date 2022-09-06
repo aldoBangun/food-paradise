@@ -47,10 +47,10 @@ const findByUserId = (userId) => {
   })
 }
 
-const findByTitle = (title) => {
+const findByTitle = (title, orderBy = 'recipe_id', orderType = 'ASC') => {
   return new Promise((resolve, reject) => {
     db.query(
-      'SELECT * FROM recipes WHERE title LIKE $1',
+      `SELECT * FROM recipes WHERE title ILIKE $1 ORDER BY ${orderBy} ${orderType}`,
       [`%${title}%`],
       (err, result) => {
         if (err) return reject(err)
