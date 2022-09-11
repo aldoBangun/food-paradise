@@ -6,23 +6,26 @@ const cloudinary = require('../config/cloudinary')
 
 const getRecipeByPage = async (req, res) => {
   const { limit, page } = req.query
+  const pageInt = +page
+  const limitInt = +limit
+
+  if (!pageInt && !limitInt) throw new ErrorResponse('Bad Request', 400)
+
   const recipes = await findAll()
-  const totalPage = Math.ceil(recipes.rowCount / limit)
-  const isValidInput = (page <= totalPage) && (+page > 0)
+  const totalPages = Math.ceil(recipes.rowCount / limitInt)
+  const isValidInput = (pageInt <= totalPages) && (pageInt > 0)
 
-  if (!isValidInput) {
-    throw new ErrorResponse('Page Not Found', 404)
-  }
+  if (!isValidInput) throw new ErrorResponse('Data Not Found', 404)
 
-  const offset = (+page - 1) * +limit
-  const data = await findByPage(limit, offset)
-  const pageCount = `${page} of ${totalPage}`
+  const offset = (pageInt - 1) * limitInt
+  const data = await findByPage(limitInt, offset)
   const totalData = recipes.rowCount
 
   res.status(200).json({
     data: data.rows,
     length: data.rowCount,
-    page: pageCount,
+    page: pageInt,
+    totalPages,
     totalData
   })
 }
@@ -42,7 +45,6 @@ const getRecipeByTitle = async (req, res) => {
     } else {
       data = await findByTitle(req.query.title)
     }
-
   } else {
     data = await findByTitle(req.query.title)
   }
@@ -50,7 +52,7 @@ const getRecipeByTitle = async (req, res) => {
   res.status(200).json({
     data: data.rows,
     length: data.rowCount
-  })  
+  })
 }
 
 const getRecipes = asyncHandler(async (req, res) => {
