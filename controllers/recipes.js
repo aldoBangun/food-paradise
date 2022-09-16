@@ -128,7 +128,10 @@ const createRecipe = asyncHandler(async (req, res) => {
   const recipe = {
     userId: req.body.user_id,
     title: req.body.title,
-    ingredients: req.body.ingredients,
+    ingredients: JSON.parse(req.body.ingredients),
+    variant: req.body.variant,
+    category: req.body.category,
+    restaurant: req.body.restaurant,
     photo: photoUrl,
     videos: uploadVideos,
     createdAt: moment().format()
