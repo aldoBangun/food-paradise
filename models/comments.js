@@ -41,7 +41,7 @@ const create = (comment) => {
   const { message, userId, recipeId } = comment
 
   return new Promise((resolve, reject) => {
-    db.query('INSERT INTO comments (message, user_id, recipe_id) VALUES ($1, $2, $3)',
+    db.query('INSERT INTO comments (message, user_id, recipe_id) VALUES ($1, $2, $3) returning *',
       [message, userId, recipeId], (err, result) => {
         if (err) return reject(err)
         resolve(result)

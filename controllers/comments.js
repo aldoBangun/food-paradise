@@ -46,10 +46,11 @@ const createComment = asyncHandler(async (req, res) => {
     recipeId: id
   }
 
-  await create(comment)
+  const response = await create(comment)
 
   res.status(201).json({
-    message: 'Successfully create a new comment'
+    message: 'Successfully create a new comment',
+    comment: response.rows[0]
   })
 })
 
