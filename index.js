@@ -18,6 +18,7 @@ const routeAuth = require('./routes/auth')
 const routeUsers = require('./routes/users')
 const routeRecipes = require('./routes/recipes')
 const routeComments = require('./routes/comments')
+const routeLikes = require('./routes/likes')
 
 createStatic()
 
@@ -33,6 +34,7 @@ app.use('/auth', routeAuth)
 app.use('/users', routeUsers)
 app.use('/recipes', routeRecipes)
 app.use('/comments', routeComments)
+app.use('/likes', routeLikes)
 
 app.use(notFound)
 app.use(errorHandler)
