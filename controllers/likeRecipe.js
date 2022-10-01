@@ -5,7 +5,7 @@ const asyncHandler = require('../middleware/asyncHandler')
 
 exports.createLike = asyncHandler(async (req, res) => {
   const userId = req.body.userId
-  const recipeId = req.params.recipeId
+  const recipeId = req.params.id
 
   await findRecipe(recipeId)
 
@@ -25,7 +25,7 @@ exports.getAllLikes = asyncHandler(async (req, res) => {
 })
 
 exports.getLikeByRecipe = asyncHandler(async (req, res) => {
-  const recipeId = req.params.recipeId
+  const recipeId = req.params.id
   await findRecipe(recipeId)
 
   const response = await findByRecipeId(recipeId)
@@ -35,7 +35,7 @@ exports.getLikeByRecipe = asyncHandler(async (req, res) => {
 })
 
 exports.getLikeByUser = asyncHandler(async (req, res) => {
-  const userId = req.params.userId
+  const userId = req.params.id
   await findUser(userId)
 
   const response = await findByUserId(userId)
@@ -45,7 +45,7 @@ exports.getLikeByUser = asyncHandler(async (req, res) => {
 })
 
 exports.deleteLike = asyncHandler(async (req, res) => {
-  const likedId = req.params.likedId
+  const likedId = req.params.id
   await findById(likedId)
   await destroy(likedId)
 
