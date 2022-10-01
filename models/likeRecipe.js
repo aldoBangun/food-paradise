@@ -3,7 +3,7 @@ const ErrorResponse = require('../utils/ErrorResponse')
 
 exports.create = ({ recipeId, userId }) => {
   return new Promise((resolve, reject) => {
-    db.query('INSERT INTO liked_recipe(recipe_id, userId) VALUES($1, $2) RETURNING *',
+    db.query('INSERT INTO liked_recipe(recipe_id, user_id) VALUES($1, $2) RETURNING *',
       [recipeId, userId], (err, result) => {
         if (err) return reject(err)
         resolve(result)
