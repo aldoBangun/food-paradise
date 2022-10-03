@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS recipes(
    variant varchar(255),
    restaurant varchar(255),
    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-   user_id int REFERENCES users(user_id)
+   user_id int REFERENCES users(user_id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS comments(
@@ -26,19 +26,19 @@ CREATE TABLE IF NOT EXISTS comments(
    message text,
    user_id int REFERENCES users(user_id),
    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-   recipe_id int REFERENCES recipes(recipe_id)
+   recipe_id int REFERENCES recipes(recipe_id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS liked_recipe(
    liked_id serial PRIMARY KEY,
-   user_id int REFERENCES users(user_id),
-   recipe_id int REFERENCES recipes(recipe_id),
+   user_id int REFERENCES users(user_id) ON DELETE CASCADE,
+   recipe_id int REFERENCES recipes(recipe_id) ON DELETE CASCADE,
    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE IF NOT EXISTS saved_recipe(
    save_id serial PRIMARY KEY,
-   user_id int REFERENCES users(user_id),
-   recipe_id int REFERENCES recipes(recipe_id),
+   user_id int REFERENCES users(user_id) ON DELETE CASCADE,
+   recipe_id int REFERENCES recipes(recipe_id) ON DELETE CASCADE,
    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
