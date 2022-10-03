@@ -42,6 +42,8 @@ router.route('/:id/comments/:commentId')
 router.route('/:id/likes')
   .get(getLikeByRecipe)
   .post(tokenVerify, createLike)
+
+router.route('/:id/likes/:likeId')
   .delete(tokenVerify, deleteLike)
 
 module.exports = router
