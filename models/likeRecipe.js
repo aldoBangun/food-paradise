@@ -11,6 +11,16 @@ exports.create = ({ recipeId, userId }) => {
   })
 }
 
+exports.findByRecipeAndUser = ({ recipeId, userId }) => {
+  return new Promise((resolve, reject) => {
+    db.query('SELECT * FROM liked_recipe WHERE recipe_id=$1 AND user_id=$2',
+      [recipeId, userId], (err, result) => {
+        if (err) return reject(err)
+        resolve(result)
+      })
+  })
+}
+
 exports.findAll = () => {
   return new Promise((resolve, reject) => {
     db.query('SELECT * FROM liked_recipe', (err, result) => {

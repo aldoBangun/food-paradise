@@ -1,13 +1,27 @@
 const { findById: findRecipe } = require('../models/recipes')
 const { findById: findUser } = require('../models/users')
-const { create, findAll, findById, findByRecipeId, findByUserId, destroy } = require('../models/likeRecipe')
+const {
+  create,
+  findByRecipeAndUser,
+  findAll,
+  findById,
+  findByRecipeId,
+  findByUserId,
+  destroy
+} = require('../models/likeRecipe')
 const asyncHandler = require('../middleware/asyncHandler')
+const ErrorResponse = require('../utils/ErrorResponse')
 
 exports.createLike = asyncHandler(async (req, res) => {
   const userId = req.body.userId
   const recipeId = req.params.id
 
+  await findUser(userId)
   await findRecipe(recipeId)
+
+  // check if a user is already liked a recipe
+  const likeResponse = await findByRecipeAndUser({ recipeId, userId })
+  if (likeResponse.rowCount) throw new ErrorResponse('This user already liked this recipe', 400)
 
   const response = await create({ userId, recipeId })
   const like = response.rows[0]
@@ -45,7 +59,7 @@ exports.getLikeByUser = asyncHandler(async (req, res) => {
 })
 
 exports.deleteLike = asyncHandler(async (req, res) => {
-  const likedId = req.params.id
+  const likedId = req.params.likeId
   await findById(likedId)
   await destroy(likedId)
 
